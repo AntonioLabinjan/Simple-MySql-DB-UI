@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registracija korisnika</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        h1 {
+            text-align: center;
+        }
+        label, input {
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            margin: 20px 0;
+        }
+        #rezultat {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registracija korisnika</h1>
+        <label for="ime">Ime:</label>
+        <input type="text" id="ime">
+        <label for="email">Email:</label>
+        <input type="email" id="email">
+        <button id="dodaj">Dodaj korisnika</button>
+        <div id="rezultat"></div>
+    </div>
+    
+    <script>
+        document.getElementById("dodaj").addEventListener("click", function() {
+            const ime = document.getElementById("ime").value;
+            const email = document.getElementById("email").value;
+            const data = { ime, email };
+
+            // Slanje podataka na backend
+            fetch("/dodaj_korisnika", {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("rezultat").textContent = data.message;
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById("rezultat").textContent = "Greška prilikom komunikacije s serverom.";
+            });
+        });
+    </script>
+</body>
+</html>
